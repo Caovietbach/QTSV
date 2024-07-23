@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+<div align="center">
+    <h1>List of Students</h1>
+    <a href="addStudent">Add new student information</a>
+    <br/><br/>
+    <table border="1" cellpadding="10">
+        <thead>
+        <tr>
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <th>Age</th>
+            <th>Student Code</th>
+            <th>Department</th>
+            <th>Major</th>
+            <th>Country</th>
+            <th>GPA</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student: ${listStudents}">
+            <td th:text="${student.id}"></td>
+            <td th:text="${student.firstName} + ' ' + ${student.lastName}"></td>
+            <td th:text="${student.age}"></td>
+            <td th:text="${student.studentCode}"></td>
+            <td th:text="${student.department}"></td>
+            <td th:text="${student.major}"></td>
+            <td th:text="${student.country}"></td>
+            <td th:text="${student.gpa}"></td>
+            <td>
+                <a th:href="@{'/edit/' + ${student.id}}">Edit</a>
+                &nbsp;&nbsp;&nbsp;
+                <a th:href="@{'/delete/' + ${student.id}}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

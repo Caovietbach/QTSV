@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Student Information</title>
+
+</head>
+<body>
+<div align="center">
+    <h1>Add new student</h1>
+    <br />
+    <form action="#" th:action="@{/save}" th:object="${student}" method="post">
+
+        <table border="0" cellpadding="10">
+            <tr>
+                <td>Student Last Name</td>
+                <td><input type="text" id="lastName" th:field="*{lastName}" /></td>
+            </tr>
+            <tr>
+                <td>Student First Name</td>
+                <td><input type="text" id="firstName" th:field="*{firstName}" /></td>
+            </tr>
+            <tr>
+                <td>Age</td>
+                <td><input type="number" id="age" th:field="*{age}" /></td>
+            </tr>
+            <tr>
+                <td>Student Code</td>
+                <td><input type="text" id="studentCode" th:field="*{studentCode}" /></td>
+            </tr>
+            <tr>
+                <td>Department</td>
+                <td><input type="text" id="department" th:field="*{department}" /></td>
+            </tr>
+            <tr>
+                <td>Major</td>
+                <td><input type="text" id="major" th:field="*{major}" /></td>
+            </tr>
+            <tr>
+                <td>Country</td>
+                <td><input type="text" id="country" th:field="*{country}" /></td>
+            </tr>
+            <tr>
+                <td>GPA</td>
+                <td><input type="float" id="gpa" th:field="*{gpa}" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="submit">Save</button> </td>
+            </tr>
+        </table>
+    </form>
+    <p th:if="${errorMessage}" th:text="${errorMessage}" style="color: red;"></p>
+</div>
+</body>
+</html>
