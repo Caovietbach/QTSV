@@ -8,6 +8,18 @@
 <body>
 <div align="center">
     <h1>List of Students</h1>
+    <br/><br/>
+    <form action="/sort" method="post">
+        <label for="choice">Sort By:</label>
+        <select id="choice" name="choice">
+            <option value="1">Last Years</option>
+            <option value="2">Last Years and has Ha Noi as the country</option>
+            <option value="3">GPA from High to Low</option>
+            <option value="4">GPA from High to Low and through their last name</option>
+        </select>
+        <button type="submit">Sort</button>
+    </form>
+    <br/><br/>
     <a href="addStudent">Add new student information</a>
     <br/><br/>
     <table border="1" cellpadding="10">

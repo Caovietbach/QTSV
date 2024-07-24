@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.*;
 
+import static org.apache.coyote.http11.Constants.a;
+
 @Service
 @Transactional
 public class StudentService {
@@ -71,4 +73,67 @@ public class StudentService {
         }
         return err;
     }
+
+    public List<Student> sortByLastYear() {
+        List<Student> sortStudents = new ArrayList<Student>();
+        List<Student> allStudents = listAll();
+        for( Student s : allStudents ){
+            if(s.getAge() == 18){
+                sortStudents.add(s);
+            }
+        }
+        return sortStudents;
+    }
+
+    public List<Student> sortByLastYearAndCountry() {
+        List<Student> sortStudents = new ArrayList<Student>();
+        List<Student> allStudents = listAll();
+        for( Student s : allStudents){
+            if(s.getAge() == 18 && s.getCountry() == "Ha Noi"){
+                sortStudents.add(s);
+            }
+        }
+        return sortStudents;
+    }
+
+    public List<Student> sortByGPAFromHighToLow() {
+        List<Student> allStudents = listAll();
+        List<Student> sortStudents = new ArrayList<Student>();
+        for (int i = 0; i < allStudents.size(); i++) {
+            for (int j = i + 1; j < allStudents.size(); j++) {
+                if (allStudents.get(j).getGpa() > allStudents.get(i).getGpa()) {
+                    Student temp = allStudents.get(j);
+                    allStudents.set(j, allStudents.get(i));
+                    allStudents.set(i, temp);
+                }
+            }
+        }
+        sortStudents = allStudents;
+        return sortStudents;
+    }
+
+    public List<Student> sortByGPAFromHighToLowAndLastName() {
+        List<Student> allStudents = listAll();
+        List<Student> sortStudents = new ArrayList<Student>();
+        for (int i = 0; i < allStudents.size(); i++) {
+            for (int j = i + 1; j < allStudents.size(); j++) {
+                if (allStudents.get(j).getGpa() > allStudents.get(i).getGpa()) {
+                    Student temp = allStudents.get(j);
+                    allStudents.set(j, allStudents.get(i));
+                    allStudents.set(i, temp);
+                }
+                if (allStudents.get(j).getGpa() == allStudents.get(i).getGpa()){
+                    int a = allStudents.get(j).getLastName().compareTo(allStudents.get(i).getLastName());
+                    if(a>0){
+                        Student temp = allStudents.get(j);
+                        allStudents.set(j, allStudents.get(i));
+                        allStudents.set(i, temp);
+                    }
+                }
+            }
+        }
+        sortStudents = allStudents;
+        return sortStudents;
+    }
+
 }

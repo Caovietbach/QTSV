@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -24,6 +25,24 @@ public class StudentController {
     public String viewHomePage(Model model) {
         List<Student> listStudents = service.listAll();
         model.addAttribute("listStudents", listStudents);
+        return "index";
+    }
+
+    @RequestMapping(value = "/sort", method = RequestMethod.POST)
+    public String sortStudent(@RequestParam("choice") int choice ,Model model){
+        List<Student> sortStudents = new ArrayList<Student>();
+        if(choice == 1){
+            sortStudents = service.sortByLastYear();
+        } else if(choice == 2){
+            sortStudents = service.sortByLastYearAndCountry();
+        } else if(choice == 3){
+            sortStudents = service.sortByGPAFromHighToLow();
+        } else if(choice == 4){
+            sortStudents = service.sortByGPAFromHighToLowAndLastName();
+        } else {
+            System.out.println("Default");
+        }
+        model.addAttribute("listStudents", sortStudents);
         return "index";
     }
 
@@ -60,7 +79,7 @@ public class StudentController {
     }
 
     @RequestMapping("/edit/{id}")
-    public ModelAndView showEditStudentPage(@PathVariable(name = "id") long id) {
+    public ModelAndView showEditStudentPage(@PathVariable(name = "id") int id) {
         ModelAndView mav = new ModelAndView("editStudent");
         Student student = service.get(id);
         mav.addObject("student", student);
@@ -69,9 +88,8 @@ public class StudentController {
     }
 
     @RequestMapping("/delete/{id}")
-    public String deleteStudent(@PathVariable(name = "id") long id) {
+    public String deleteStudent(@PathVariable(name = "id") int id) {
         service.delete(id);
         return "redirect:/";
     }
-
 }
