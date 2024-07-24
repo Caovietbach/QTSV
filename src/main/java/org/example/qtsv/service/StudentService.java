@@ -32,6 +32,8 @@ public class StudentService {
     }
 
 
+
+
     public String validateNewInformation(Student student){
         String err = null;
         if(student.getLastName() == ""){
@@ -46,6 +48,9 @@ public class StudentService {
             err = "Student must have a first name";
             System.out.println("1");
         }
+        if( student.getAge() <= 0){
+            err = "Age must greater than 0";
+        }
         if(student.getStudentCode() == ""){
             err = "Student must have a student code";
             System.out.println("2");
@@ -56,18 +61,61 @@ public class StudentService {
             err = "This student code has been used";
             System.out.println("3");
         }
+        if(student.getDepartment() == ""){
+            err = "Student must have a department";
+            System.out.println("1");
+        }
+        if(student.getMajor() == ""){
+            err = "Student must have a major";
+        }
+        if(student.getCountry() == ""){
+            err = "Student must have a country";
+        }
+        if( student.getGpa() == null ){
+            err = "Student must have a GPA";
+        }
+        if( student.getGpa() < 0){
+            err = "Student's GPA must above or equal 0";
+        }
         return err;
     }
 
     public String validateEditInformation(Student student){
         String err = null;
-        if(student.getFirstName().equals("")){
+        if(student.getLastName() == ""){
+            err = "Student must have a last name";
+            System.out.println("1");
+        }
+        if(student.getFirstName() == ""){
             err = "Student must have a first name";
             System.out.println("1");
         }
-        if(student.getLastName().equals("")){
-            err = "Student must have a last name";
+        if( String.valueOf(student.getAge()) == ""){
+            err = "Student must have a first name";
+            System.out.println("1");
+        }
+        if( student.getAge() <= 0){
+            err = "Age must greater than 0";
+        }
+        if(student.getStudentCode() == ""){
+            err = "Student must have a student code";
             System.out.println("2");
+        }
+        if(student.getDepartment() == ""){
+            err = "Student must have a department";
+            System.out.println("1");
+        }
+        if(student.getMajor() == ""){
+            err = "Student must have a major";
+        }
+        if(student.getCountry() == ""){
+            err = "Student must have a country";
+        }
+        if( student.getGpa() == null ){
+            err = "Student must have a GPA";
+        }
+        if( student.getGpa() < 0){
+            err = "Student's GPA must above or equal 0";
         }
         return err;
     }

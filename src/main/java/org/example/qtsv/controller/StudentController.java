@@ -47,14 +47,24 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/saveEdit", method = RequestMethod.POST)
-    public String saveEditStudent(@ModelAttribute("student") Student student, RedirectAttributes model) {
-        String errorMessage = service.validateEditInformation(student);
+    public String saveEditStudent(@ModelAttribute("student") Student updatedStudent, RedirectAttributes model) {
+        String errorMessage = service.validateEditInformation(updatedStudent);
         if (errorMessage != null) {
             model.addFlashAttribute("errorMessage", errorMessage);
-            long id = student.getId();
+            int id = updatedStudent.getId();
             return "redirect:/edit/" + id;
         } else {
-            service.save(student);
+            Student existingStudent = new Student();
+            existingStudent.setId(updatedStudent.getId());
+            existingStudent.setFirstName(updatedStudent.getFirstName());
+            existingStudent.setLastName(updatedStudent.getLastName());
+            existingStudent.setAge(updatedStudent.getAge());
+            existingStudent.setStudentCode(updatedStudent.getStudentCode());
+            existingStudent.setDepartment(updatedStudent.getDepartment());
+            existingStudent.setMajor(updatedStudent.getMajor());
+            existingStudent.setCountry(updatedStudent.getCountry());
+            existingStudent.setGpa(updatedStudent.getGpa());
+            service.save(existingStudent);
             return "redirect:/";
         }
     }
