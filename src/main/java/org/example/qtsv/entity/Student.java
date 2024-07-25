@@ -19,9 +19,12 @@ public class Student {
     private String major;
     private int year;
     private String country;
-    private float gpa;
+    private Float gpa;
 
     public int getId() { return id; }
+    public void setId(int id) {
+        this.id = id;
+    }
     public String getFirstName() {
         return firstName;
     }
@@ -86,19 +89,15 @@ public class Student {
         this.country = country;
     }
 
-    public float getGpa() {
+    public Float getGpa() {
         return gpa;
     }
 
-    public void setGpa(int gpa) {
+    public void setGpa(Float gpa) {
         this.gpa = gpa;
     }
 
-<<<<<<< Updated upstream
-    public Student(int id, String firstName, String lastName, int age, String studentCode, String department, String major, String country, float gpa) {
-=======
     public Student(int id, String firstName, String lastName, int age, String studentCode, String department, String major, int year, String country, Float gpa) {
->>>>>>> Stashed changes
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

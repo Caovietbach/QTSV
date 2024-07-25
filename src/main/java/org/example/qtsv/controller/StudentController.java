@@ -66,16 +66,13 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/saveEdit", method = RequestMethod.POST)
-    public String saveEditStudent(@ModelAttribute("student") Student student, RedirectAttributes model) {
-        String errorMessage = service.validateEditInformation(student);
+    public String saveEditStudent(@ModelAttribute("student") Student updatedStudent, RedirectAttributes model) {
+        String errorMessage = service.validateEditInformation(updatedStudent);
         if (errorMessage != null) {
             model.addFlashAttribute("errorMessage", errorMessage);
-            long id = student.getId();
+            int id = updatedStudent.getId();
             return "redirect:/edit/" + id;
         } else {
-<<<<<<< Updated upstream
-            service.save(student);
-=======
             Student existingStudent = new Student();
             existingStudent.setId(updatedStudent.getId());
             existingStudent.setFirstName(updatedStudent.getFirstName());
@@ -88,7 +85,6 @@ public class StudentController {
             existingStudent.setCountry(updatedStudent.getCountry());
             existingStudent.setGpa(updatedStudent.getGpa());
             service.save(existingStudent);
->>>>>>> Stashed changes
             return "redirect:/";
         }
     }
