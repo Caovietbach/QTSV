@@ -17,6 +17,7 @@ public class Student {
     private String studentCode;
     private String department;
     private String major;
+    private int year;
     private String country;
     private float gpa;
 
@@ -69,6 +70,14 @@ public class Student {
         this.major = major;
     }
 
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
     public String getCountry() {
         return country;
     }
@@ -85,7 +94,11 @@ public class Student {
         this.gpa = gpa;
     }
 
+<<<<<<< Updated upstream
     public Student(int id, String firstName, String lastName, int age, String studentCode, String department, String major, String country, float gpa) {
+=======
+    public Student(int id, String firstName, String lastName, int age, String studentCode, String department, String major, int year, String country, Float gpa) {
+>>>>>>> Stashed changes
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -93,6 +106,7 @@ public class Student {
         this.studentCode = studentCode;
         this.department = department;
         this.major = major;
+        this.year = year;
         this.country = country;
         this.gpa = gpa;
     }
