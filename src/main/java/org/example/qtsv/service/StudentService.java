@@ -2,6 +2,7 @@ package org.example.qtsv.service;
 
 import jakarta.transaction.Transactional;
 import org.example.qtsv.entity.Student;
+import org.example.qtsv.entity.StudentData;
 import org.example.qtsv.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageImpl;
@@ -196,13 +197,9 @@ public class StudentService {
         return new PageImpl<>(paginatedList, pageable, total);
     }
 
-    public Map<String, Object> getContent(Page<Student> students){
-        Map<String, Object> content = new HashMap<>();
-        content.put("totalElements", students.getTotalElements());
-        content.put("totalPages", students.getTotalPages());
-        content.put("size", students.getSize());
-        content.put("content", students.getContent());
-        return content;
+    public StudentData getContent(Page<Student> students){
+        StudentData data = new StudentData(students.getTotalElements(),students.getTotalPages(), students.getSize(), students.getContent());
+        return data;
     }
 
 

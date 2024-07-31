@@ -2,6 +2,7 @@ package org.example.qtsv.controller;
 
 import org.example.qtsv.ApiResponse;
 import org.example.qtsv.entity.Student;
+import org.example.qtsv.entity.StudentData;
 import org.example.qtsv.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +32,8 @@ public class StudentControllerNew {
 
 
     @GetMapping("/")
-    public ApiResponse<Map<String, Object>> showAllStudents(@RequestParam(value = "sort", required = false) Integer sort,@RequestParam(value = "page", defaultValue = "0") int page,
-                                         @RequestParam(value = "size", defaultValue = "10") int size, @ModelAttribute Student s) {
+    public ApiResponse<StudentData> showAllStudents(@RequestParam(value = "sort", required = false) Integer sort, @RequestParam(value = "page", defaultValue = "0") int page,
+                                                        @RequestParam(value = "size", defaultValue = "10") int size, @ModelAttribute Student s) {
         Pageable pageable = PageRequest.of(page, size);
         List<Student> studentList = new ArrayList<Student>();
         List<Student> allStudents = service.listAll();
