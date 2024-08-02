@@ -1,5 +1,7 @@
 package org.example.qtsv.entity;
 
+import java.util.List;
+
 public class StudentData {
     private long totalElements;
     private int totalPages;
@@ -38,7 +40,7 @@ public class StudentData {
         this.content = content;
     }
 
-    public StudentData(long totalElements, int totalPages, int size, Object content) {
+    public StudentData(long totalElements, int totalPages, int size, List<Student> content) {
         this.totalElements = totalElements;
         this.totalPages = totalPages;
         this.size = size;

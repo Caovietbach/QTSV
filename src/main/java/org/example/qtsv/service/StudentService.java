@@ -52,89 +52,37 @@ public class StudentService {
         existingStudent.setGpa(updatedStudent.getGpa());
         save(existingStudent);
     }
-    public String validateNewInformation(Student student){
+    public String validateInput(Student student, boolean isNew) {
         String err = null;
-        if(student.getLastName() == ""){
-            err = "Student must have a last name";
-            System.out.println("1");
-        }
-        if(student.getFirstName() == ""){
-            err = "Student must have a first name";
-            System.out.println("1");
-        }
-        if( String.valueOf(student.getAge()) == ""){
-            err = "Student must have a first name";
-            System.out.println("1");
-        }
-        if( student.getAge() <= 0){
-            err = "Age must greater than 0";
-        }
-        if(student.getStudentCode() == ""){
-            err = "Student must have a student code";
-            System.out.println("2");
-        }
-        String sCode = student.getStudentCode();
-        boolean sCodeDuplicate = repo.existsByStudentCode(sCode);
-        if (sCodeDuplicate == true){
-            err = "This student code has been used";
-            System.out.println("3");
-        }
-        if(student.getDepartment() == ""){
-            err = "Student must have a department";
-            System.out.println("1");
-        }
-        if(student.getMajor() == ""){
-            err = "Student must have a major";
-        }
-        if(student.getCountry() == ""){
-            err = "Student must have a country";
-        }
-        if( student.getGpa() == null ){
-            err = "Student must have a GPA";
-        }
-        if( student.getGpa() < 0){
-            err = "Student's GPA must above or equal 0";
-        }
-        return err;
-    }
 
-    public String validateEditInformation(Student student){
-        String err = null;
-        if(student.getLastName() == ""){
+        if(student.getLastName() == null || student.getLastName().isEmpty()) {
             err = "Student must have a last name";
-            System.out.println("1");
         }
-        if(student.getFirstName() == ""){
+        if(student.getFirstName() == null || student.getFirstName().isEmpty()) {
             err = "Student must have a first name";
-            System.out.println("1");
         }
-        if( String.valueOf(student.getAge()) == ""){
-            err = "Student must have a first name";
-            System.out.println("1");
+        if(student.getAge() <= 0) {
+            err = "Age must be greater than 0";
         }
-        if( student.getAge() <= 0){
-            err = "Age must greater than 0";
-        }
-        if(student.getStudentCode() == ""){
+        if(student.getStudentCode() == null || student.getStudentCode().isEmpty()) {
             err = "Student must have a student code";
-            System.out.println("2");
         }
-        if(student.getDepartment() == ""){
+        if(isNew && repo.existsByStudentCode(student.getStudentCode())) {
+            err = "This student code has been used";
+        }
+        if(student.getDepartment() == null || student.getDepartment().isEmpty()) {
             err = "Student must have a department";
-            System.out.println("1");
         }
-        if(student.getMajor() == ""){
+        if(student.getMajor() == null || student.getMajor().isEmpty()) {
             err = "Student must have a major";
         }
-        if(student.getCountry() == ""){
+        if(student.getCountry() == null || student.getCountry().isEmpty()) {
             err = "Student must have a country";
         }
-        if( student.getGpa() == null ){
-            err = "Student must have a GPA";
+        if(student.getGpa() == null || student.getGpa() < 0) {
+            err = "Student's GPA must be above or equal to 0";
         }
-        if( student.getGpa() < 0){
-            err = "Student's GPA must above or equal 0";
-        }
+
         return err;
     }
 
@@ -169,10 +117,8 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
-    public List<Student> sortByLastName(List<Student> allStudents) {
-        return allStudents.stream().sorted((s1, s2) -> {
-            return s1.getLastName().compareTo(s2.getLastName());
-        }).collect(Collectors.toList());
+    public List<Student> sortByLastName() {
+        return repo.findAllByOrderByLastNameAsc();
     }
 
     public List<Student> search( Student student, List<Student> allStudents){

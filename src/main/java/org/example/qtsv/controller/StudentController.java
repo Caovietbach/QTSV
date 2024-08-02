@@ -37,7 +37,7 @@ public class StudentController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String saveStudent(@ModelAttribute("student") Student student, Model model) {
-        String errorMessage = service.validateNewInformation(student);
+        String errorMessage = service.validateInput(student,true);
         if (errorMessage != null) {
             model.addAttribute("errorMessage", errorMessage);
             return "addStudent";
@@ -49,7 +49,7 @@ public class StudentController {
 
     @RequestMapping(value = "/saveEdit", method = RequestMethod.POST)
     public String saveEditStudent(@ModelAttribute("student") Student updatedStudent, RedirectAttributes model) {
-        String errorMessage = service.validateEditInformation(updatedStudent);
+        String errorMessage = service.validateInput(updatedStudent,false);
         if (errorMessage != null) {
             model.addFlashAttribute("errorMessage", errorMessage);
             int id = updatedStudent.getId();
