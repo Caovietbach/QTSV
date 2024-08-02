@@ -55,31 +55,31 @@ public class StudentService {
     public String validateInput(Student student, boolean isNew) {
         String err = null;
 
-        if(student.getLastName() == null || student.getLastName().isEmpty()) {
+        if(student.getLastName() == null) {
             err = "Student must have a last name";
         }
-        if(student.getFirstName() == null || student.getFirstName().isEmpty()) {
+        if(student.getFirstName() == null) {
             err = "Student must have a first name";
         }
         if(student.getAge() <= 0) {
             err = "Age must be greater than 0";
         }
-        if(student.getStudentCode() == null || student.getStudentCode().isEmpty()) {
+        if(student.getStudentCode() == null) {
             err = "Student must have a student code";
         }
         if(isNew && repo.existsByStudentCode(student.getStudentCode())) {
             err = "This student code has been used";
         }
-        if(student.getDepartment() == null || student.getDepartment().isEmpty()) {
+        if(student.getDepartment() == null) {
             err = "Student must have a department";
         }
-        if(student.getMajor() == null || student.getMajor().isEmpty()) {
+        if(student.getMajor() == null) {
             err = "Student must have a major";
         }
-        if(student.getCountry() == null || student.getCountry().isEmpty()) {
+        if(student.getCountry() == null) {
             err = "Student must have a country";
         }
-        if(student.getGpa() == null || student.getGpa() < 0) {
+        if(student.getGpa() < 0) {
             err = "Student's GPA must be above or equal to 0";
         }
 
@@ -94,7 +94,9 @@ public class StudentService {
 
     public List<Student> sortByLastYearAndCountry(List<Student> allStudents) {
         return allStudents.stream()
-                .filter(s -> s.getYear() == 4 && "Ha Noi".equals(s.getCountry()))
+                .filter(s -> s.getYear() == 4 ).sorted((s1, s2) -> {
+                    return s1.getLastName().compareTo(s2.getLastName());
+                })
                 .collect(Collectors.toList());
     }
 
@@ -117,20 +119,16 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
-    public List<Student> sortByLastName() {
-        return repo.findAllByOrderByLastNameAsc();
+    public List<Student> sortByLastName(List<Student> studentList) {
+        return studentList.stream().sorted((s1,s2) -> {
+            return s1.getLastName().compareTo(s2.getLastName());
+        }).collect(Collectors.toList());
     }
 
-    public List<Student> search( Student student, List<Student> allStudents){
-        List<Student> searchedStudents = allStudents.stream()
-                .filter(s -> (student.getFirstName() == null || s.getFirstName().contains(student.getFirstName())))
-                .filter(s -> (student.getLastName() == null || s.getLastName().contains(student.getLastName())))
-                .filter(s -> (Integer.valueOf(student.getAge()) == 0 || s.getAge() == Integer.valueOf(student.getAge())))
-                .filter(s -> (student.getStudentCode() == null || s.getStudentCode().contains(student.getStudentCode())))
-                .filter(s -> (Integer.valueOf(student.getYear()) == 0 || s.getYear() == Integer.valueOf(student.getYear())))
-                .filter(s -> (student.getMajor() == null || s.getMajor().equals(student.getMajor())))
-                .filter(s -> (student.getCountry() == null || s.getCountry().equals(student.getCountry())))
-                .collect(Collectors.toList());
+    public List<Student> search( Student student){
+        List<Student> searchedStudents = repo.searchBy(student.getFirstName(),student.getLastName(),student.getAge(),
+                                            student.getStudentCode(),student.getYear(),student.getMajor(),
+                                            student.getCountry());
         return searchedStudents;
     }
 

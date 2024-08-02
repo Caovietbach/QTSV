@@ -36,15 +36,15 @@ public class StudentControllerNew {
                                                         @RequestParam(value = "size", defaultValue = "10") int size, @ModelAttribute Student s) {
         Pageable pageable = PageRequest.of(page, size);
         List<Student> studentList = new ArrayList<Student>();
-        studentList = service.sortByLastName();
 
         //Magic Number
         // Request Life Cycle
 
         if (s.getFirstName() != null || s.getLastName() != null ||  Integer.valueOf(s.getAge()) != 0 ||
                 s.getStudentCode() != null || Integer.valueOf(s.getYear()) != 0 || s.getMajor() !=null || s.getCountry() != null) {
-            studentList = service.search(s, studentList);
+            studentList = service.search(s);
         }
+
         if (sort != null){
             if(sort == SORT_BY_LAST_YEAR){
                 studentList = service.sortByLastYear(studentList);
@@ -59,7 +59,9 @@ public class StudentControllerNew {
                 studentList = service.sortByGPAFromHighToLowAndLastName(studentList);
             }
         }
+        studentList = service.sortByLastName(studentList);
         Page<Student> students = service.getPage(studentList,pageable);
+
         return new ApiResponse<>(true, "Thực hiện thành công", service.getContent(students));
     }
 
