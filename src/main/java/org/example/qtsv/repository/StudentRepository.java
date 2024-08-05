@@ -23,9 +23,9 @@ public interface StudentRepository extends CrudRepository<Student, Long>, Paging
     List<Student> searchBy(
             @Param("firstName") String firstName,
             @Param("lastName") String lastName,
-            @Param("age") Integer age,
+            @Param("age") int age,
             @Param("studentCode") String studentCode,
-            @Param("year") Integer year,
+            @Param("year") int year,
             @Param("major") String major,
             @Param("country") String country);
 }

@@ -61,13 +61,10 @@ public class StudentControllerNew {
         }
         studentList = service.sortByLastName(studentList);
         Page<Student> students = service.getPage(studentList,pageable);
-
+        System.out.println(s);
         return new ApiResponse<>(true, "Thực hiện thành công", service.getContent(students));
     }
-
-
-
-
+    
     @PostMapping("/add")
     public String addStudent(@RequestBody Student student) {
         String errorMessage = service.validateInput(student, false);
