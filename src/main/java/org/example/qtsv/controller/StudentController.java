@@ -1,4 +1,7 @@
+/*
 package org.example.qtsv.controller;
+
+
 
 import org.example.qtsv.entity.Student;
 import org.example.qtsv.service.StudentService;
@@ -86,3 +89,4 @@ public class StudentController {
         return "redirect:/";
     }
 }
+ */

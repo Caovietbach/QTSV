@@ -1,6 +1,7 @@
 package org.example.qtsv.controller;
 
 import org.example.qtsv.ApiResponse;
+import org.example.qtsv.ValidateException;
 import org.example.qtsv.entity.Student;
 import org.example.qtsv.entity.StudentData;
 import org.example.qtsv.service.StudentService;
@@ -20,7 +21,7 @@ import java.util.Map;
 @RequestMapping("/api/students")
 public class StudentControllerNew {
     private final StudentService service;
-    private static final int SORT_BY_LAST_YEAR = 1;
+    private static final int FILTER_BY_LAST_YEAR = 1;
     private static final int SORT_BY_LAST_YEAR_AND_COUNTRY = 2;
     private static final int SORT_BY_GPA_HIGH_TO_LOW = 3;
     private static final int SORT_BY_GPA_HIGH_TO_LOW_AND_LAST_NAME = 4;
@@ -32,7 +33,7 @@ public class StudentControllerNew {
 
 
     @GetMapping("/")
-    public ApiResponse<StudentData> showAllStudents(@RequestParam(value = "sort", required = false) Integer sort, @RequestParam(value = "page", defaultValue = "0") int page,
+    public ApiResponse<StudentData> showAllStudents(@RequestParam(value = "processData", required = false) Integer processData, @RequestParam(value = "page", defaultValue = "0") int page,
                                                         @RequestParam(value = "size", defaultValue = "10") int size, @ModelAttribute Student s) {
         Pageable pageable = PageRequest.of(page, size);
         List<Student> studentList = new ArrayList<Student>();
@@ -45,18 +46,18 @@ public class StudentControllerNew {
             studentList = service.search(s);
         }
 
-        if (sort != null){
-            if(sort == SORT_BY_LAST_YEAR){
-                studentList = service.sortByLastYear(studentList);
+        if (processData != null){
+            if(processData == FILTER_BY_LAST_YEAR){
+                studentList = service.processDataByFilteringLastYear(studentList);
             }
-            if(sort == SORT_BY_LAST_YEAR_AND_COUNTRY){
-                studentList = service.sortByLastYearAndCountry(studentList);
+            if(processData == SORT_BY_LAST_YEAR_AND_COUNTRY){
+                studentList = service.processDataBySortingCountry(studentList);
             }
-            if(sort == SORT_BY_GPA_HIGH_TO_LOW){
-                studentList = service.sortByGPAFromHighToLow(studentList);
+            if(processData == SORT_BY_GPA_HIGH_TO_LOW){
+                studentList = service.processDataBySortingGPAFromHighToLow(studentList);
             }
-            if(sort == SORT_BY_GPA_HIGH_TO_LOW_AND_LAST_NAME){
-                studentList = service.sortByGPAFromHighToLowAndLastName(studentList);
+            if(processData == SORT_BY_GPA_HIGH_TO_LOW_AND_LAST_NAME){
+                studentList = service.processDataBySortingGPAFromHighToLowAndLastName(studentList);
             }
         }
         studentList = service.sortByLastName(studentList);
@@ -64,33 +65,27 @@ public class StudentControllerNew {
         System.out.println(s);
         return new ApiResponse<>(true, "Thực hiện thành công", service.getContent(students));
     }
-    
+
     @PostMapping("/add")
     public String addStudent(@RequestBody Student student) {
-        String errorMessage = service.validateInput(student, false);
-        if (errorMessage != null) {
-            return errorMessage;
-        } else {
+        try {
+            service.validateInput(student, true);
             service.save(student);
-            return "Student saved successfully";
+        } catch (Exception e){
+            return "An error occurred while validating input: " + e.getMessage();
         }
-
+        return "Student saved successfully";
     }
 
     @PutMapping("/edit/{id}")
     public String editStudent(@PathVariable(name = "id") int id, @RequestBody Student updatedStudent) {
-        Student existingStudent = service.get(id);
-        String errorMessage = service.validateInput(updatedStudent,true);
-        if (errorMessage != null) {
-            return errorMessage;
-        } else {
-            if (existingStudent != null) {
-                service.saveEdit(id, updatedStudent);
-                return "Student updated successfully";
-            } else {
-                return "Student not found";
-            }
+        try {
+            service.validateInput(updatedStudent, false);
+            service.save(updatedStudent);
+        } catch (Exception e){
+            return "An error occurred while validating input: " + e.getMessage();
         }
+        return "Student saved successfully";
     }
 
     @DeleteMapping("/delete/{id}")
