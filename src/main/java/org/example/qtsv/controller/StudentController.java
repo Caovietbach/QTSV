@@ -4,7 +4,7 @@ package org.example.qtsv.controller;
 
 
 import org.example.qtsv.entity.Student;
-import org.example.qtsv.service.StudentService;
+import org.example.qtsv.service.Impl.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
