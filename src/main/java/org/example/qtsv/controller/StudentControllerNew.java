@@ -90,9 +90,9 @@ public class StudentControllerNew {
         return "Student saved successfully";
     }
 
-    @PostMapping("/addLastYearStudent")
-    public String addLastYearStudent(@RequestParam(value = "id") int id, @RequestParam(value = "thesisCode") String thesisCode, @RequestParam(value = "thesisTitle") String thesisTitle ){
-        service.save(id, thesisCode, thesisTitle);
+    @PostMapping("/addLastYearStudentThesis/{id}")
+    public String addLastYearStudentThesis(@PathVariable(name = "id") int id, @RequestBody LastYearStudent student ){
+        service.save(id, student);
         return "Student thesis register successful.";
     }
 

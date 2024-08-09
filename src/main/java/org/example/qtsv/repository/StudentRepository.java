@@ -31,6 +31,5 @@ public interface StudentRepository extends CrudRepository<Student, Long>, Paging
             @Param("major") String major,
             @Param("country") String country);
 
-    @Query("SELECT lys FROM LastYearStudent lys WHERE " + "(:thesisTitle IS NULL OR lys.thesisTitle LIKE %:thesisTitle%)")
-    List<LastYearStudent> searchThesisBy(@Param("thesisTitle") String thesisTitle);
+
 }

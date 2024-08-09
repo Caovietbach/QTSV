@@ -6,6 +6,7 @@ import org.example.qtsv.api.LastYearStudentData;
 import org.example.qtsv.entity.LastYearStudent;
 import org.example.qtsv.entity.Student;
 import org.example.qtsv.api.StudentData;
+import org.example.qtsv.repository.LastYearStudentRepository;
 import org.example.qtsv.repository.StudentRepository;
 import org.example.qtsv.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,19 +23,23 @@ import java.util.stream.Collectors;
 public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository repo;
+
+    @Autowired
+    private LastYearStudentRepository lysRepo;
     public void save(Student student) {
         repo.save(student);
     }
 
-    public void save(int id, String thesisCode, String thesisTitle){
+
+    public void save(int id,LastYearStudent lastYearStudent){
         Student student = get(id);
-        if (student.getAge() != 4){
-            throw new ValidateException("This student must be in their last year!");
-        } else if (thesisCode == null || thesisTitle == null){
+        if (student == null){
+            throw new ValidateException("There is no student with this ID");
+        }
+        if (lastYearStudent.getThesisCode() == null || lastYearStudent.getThesisTitle() == null){
             throw new ValidateException("Please enter thesis code and its tittle");
         } else {
-            LastYearStudent lastYearStudent = new LastYearStudent();
-            lastYearStudent.setId(student.getId());
+            lastYearStudent.setId(id);
             lastYearStudent.setFirstName(student.getFirstName());
             lastYearStudent.setLastName(student.getLastName());
             lastYearStudent.setAge(student.getAge());
@@ -44,9 +49,7 @@ public class StudentServiceImpl implements StudentService {
             lastYearStudent.setYear(student.getYear());
             lastYearStudent.setCountry(student.getCountry());
             lastYearStudent.setGpa(student.getGpa());
-            lastYearStudent.setThesisCode(thesisCode);
-            lastYearStudent.setThesisTitle(thesisTitle);
-            repo.save(lastYearStudent);
+            lysRepo.save(lastYearStudent);
         }
     }
 
@@ -158,7 +161,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     public List<LastYearStudent> search(String thesisTitle){
-        List<LastYearStudent> searchedStudents = repo.searchThesisBy(thesisTitle);
+        List<LastYearStudent> searchedStudents = lysRepo.searchThesisBy(thesisTitle);
         return searchedStudents;
     }
 
@@ -189,12 +192,4 @@ public class StudentServiceImpl implements StudentService {
         LastYearStudentData data = new LastYearStudentData(students.getTotalElements(),students.getTotalPages(), students.getSize(), students.getContent());
         return data;
     }
-
-
-
-
-
-
-
-
 }
