@@ -20,39 +20,36 @@
                 </td>
             </tr>
             <tr>
-                <td>Student Last Name:</td>
-                <td>
-                    <input type="text" th:field="*{lastName}" />
-                </td>
+                <td>Student Last Name</td>
+                <td><input type="text" id="lastName" th:field="*{lastName}" /></td>
             </tr>
             <tr>
-                <td>Student First Name:</td>
-                <td><input type="text" th:field="*{firstName}" /></td>
+                <td>Student First Name</td>
+                <td><input type="text" id="firstName" th:field="*{firstName}" /></td>
             </tr>
-
             <tr>
                 <td>Age</td>
-                <td><input type="number" th:field="*{age}" /></td>
+                <td><input type="number" id="age" th:field="*{age}" /></td>
             </tr>
             <tr>
-                <td>Student Code </td>
-                <td><input type="text" th:field="*{studentCode}" /></td>
+                <td>Student Code</td>
+                <td><input type="text" id="studentCode" th:field="*{studentCode}" /></td>
             </tr>
             <tr>
                 <td>Department</td>
-                <td><input type="text" th:field="*{department}" /></td>
+                <td><input type="text" id="department" th:field="*{department}" /></td>
             </tr>
             <tr>
                 <td>Major</td>
-                <td><input type="text" th:field="*{major}" /></td>
+                <td><input type="text" id="major" th:field="*{major}" /></td>
             </tr>
             <tr>
                 <td>Country</td>
-                <td><input type="text" th:field="*{country}" /></td>
+                <td><input type="text" id="country" th:field="*{country}" /></td>
             </tr>
             <tr>
                 <td>GPA</td>
-                <td><input type="float" th:field="*{gpa}" /></td>
+                <td><input type="number" step="0.01" id="gpa" th:field="*{gpa}"  /></td>
             </tr>
             <tr>
                 <td colspan="2"><button type="submit">Save</button> </td>
