@@ -31,6 +31,14 @@ public class StudentService {
         repo.deleteById(id);
     }
 
+    // How to write a proper class inside interface
+    // Why abstract is a why interface has a
+    /*
+    public void test {
+        System.pri
+    }
+
+     */
 
     public String validateNewInformation(Student student){
         String err = null;
