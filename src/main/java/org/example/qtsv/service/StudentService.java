@@ -1,82 +1,56 @@
 package org.example.qtsv.service;
 
-import jakarta.transaction.Transactional;
+import org.example.qtsv.api.StudentData;
+import org.example.qtsv.entity.LastYearStudentEntity;
 import org.example.qtsv.entity.Student;
-import org.example.qtsv.repository.StudentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.*;
 
-@Service
-@Transactional
-public class StudentService {
-    @Autowired
-    private StudentRepository repo;
+public interface StudentService {
+    List<Student> sortByYearOfStudy(List<Student> students);
+    List<Student> sortByCountryFirstAlphabet(List<Student> students);
+    List<Student> sortByGPAFromHighToLow(List<Student> students);
+    List<Student> sortByGPAFromHighToLowAndLastNameFirstAlphabet(List<Student> students);
+    List<Student> sortByLastName(List<Student> students);
 
-    public List<Student> listAll() {
-        return (List<Student>) repo.findAll();
-    }
+    void save(int id, LastYearStudentEntity lastYearStudent);
+    void save(Student student);
 
-    public void save(Student student) {
-        repo.save(student);
-    }
+    List<Student> search( Student student);
 
-    public Student get(long id) {
-        return repo.findById(id).get();
-    }
+    List<LastYearStudentEntity> search(String thesisTitle);
 
-    public void delete(long id) {
-        repo.deleteById(id);
-    }
+    Page<Student> getPage(List<Student> students, Pageable pageable);
+    StudentData getContent(Page<Student> students);
 
     // How to write a proper class inside interface
+    //Using default class and static class
+    //
     // Why abstract is a why interface has a
     /*
-    public void test {
-        System.pri
+    public static void test {
+        System.out.println("test");
     }
 
      */
+    public static class test {
+        static class B {
+            public static String T() {
+                return "T";
+            }
+        }
 
-    public String validateNewInformation(Student student){
-        String err = null;
-        if(student.getLastName() == ""){
-            err = "Student must have a last name";
-            System.out.println("1");
-        }
-        if(student.getFirstName() == ""){
-            err = "Student must have a first name";
-            System.out.println("1");
-        }
-        if( String.valueOf(student.getAge()) == ""){
-            err = "Student must have a first name";
-            System.out.println("1");
-        }
-        if(student.getStudentCode() == ""){
-            err = "Student must have a student code";
-            System.out.println("2");
-        }
-        String sCode = student.getStudentCode();
-        boolean sCodeDuplicate = repo.existsByStudentCode(sCode);
-        if (sCodeDuplicate == true){
-            err = "This student code has been used";
-            System.out.println("3");
-        }
-        return err;
+
     }
 
-    public String validateEditInformation(Student student){
-        String err = null;
-        if(student.getFirstName().equals("")){
-            err = "Student must have a first name";
-            System.out.println("1");
-        }
-        if(student.getLastName().equals("")){
-            err = "Student must have a last name";
-            System.out.println("2");
-        }
-        return err;
+    default void defaultMethod() {
+        System.out.println("This is a default method.");
     }
+
+    default void print(){
+        System.out.println("This is second default method");
+    }
+
 }

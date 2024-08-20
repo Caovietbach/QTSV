@@ -1,26 +1,32 @@
 package org.example.qtsv.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Value;
 
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Student {
 
     @Id
     @GeneratedValue
-    private int id;
+    protected int id;
     private String firstName;
+    @Value("$studentName")
+    private String a;
     private String lastName;
     private int age;
     private String studentCode;
     private String department;
     private String major;
+    private int year;
     private String country;
-    private float gpa;
+    private Float gpa;
 
     public int getId() { return id; }
+    public void setId(int id) {
+        this.id = id;
+    }
     public String getFirstName() {
         return firstName;
     }
@@ -69,6 +75,14 @@ public class Student {
         this.major = major;
     }
 
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
     public String getCountry() {
         return country;
     }
@@ -77,15 +91,15 @@ public class Student {
         this.country = country;
     }
 
-    public float getGpa() {
+    public Float getGpa() {
         return gpa;
     }
 
-    public void setGpa(int gpa) {
+    public void setGpa(Float gpa) {
         this.gpa = gpa;
     }
 
-    public Student(int id, String firstName, String lastName, int age, String studentCode, String department, String major, String country, float gpa) {
+    public Student(int id, String firstName, String lastName, int age, String studentCode, String department, String major, int year, String country, Float gpa) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -93,6 +107,7 @@ public class Student {
         this.studentCode = studentCode;
         this.department = department;
         this.major = major;
+        this.year = year;
         this.country = country;
         this.gpa = gpa;
     }

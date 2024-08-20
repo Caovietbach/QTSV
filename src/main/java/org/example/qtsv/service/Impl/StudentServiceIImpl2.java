@@ -1,30 +1,24 @@
 package org.example.qtsv.service.Impl;
 
-import jakarta.transaction.Transactional;
-import org.example.qtsv.exception.ValidateException;
 import org.example.qtsv.api.LastYearStudentData;
+import org.example.qtsv.api.StudentData;
 import org.example.qtsv.entity.LastYearStudentEntity;
 import org.example.qtsv.entity.Student;
-import org.example.qtsv.api.StudentData;
-import org.example.qtsv.exception.ValidateException2;
+import org.example.qtsv.exception.ValidateException;
 import org.example.qtsv.repository.LastYearStudentRepository;
 import org.example.qtsv.repository.StudentRepository;
 import org.example.qtsv.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service("StudentServiceOld")
-@Transactional
-public class StudentServiceImpl implements StudentService {
+@Service
+public class StudentServiceIImpl2 implements StudentService {
     @Autowired
     private StudentRepository repo;
 
@@ -203,8 +197,7 @@ public class StudentServiceImpl implements StudentService {
 
 
 
-    
+
 
 
 }
-

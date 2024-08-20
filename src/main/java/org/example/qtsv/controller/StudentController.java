@@ -1,7 +1,10 @@
+/*
 package org.example.qtsv.controller;
 
+
+
 import org.example.qtsv.entity.Student;
-import org.example.qtsv.service.StudentService;
+import org.example.qtsv.service.Impl.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -36,7 +40,7 @@ public class StudentController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String saveStudent(@ModelAttribute("student") Student student, Model model) {
-        String errorMessage = service.validateNewInformation(student);
+        String errorMessage = service.validateInput(student,true);
         if (errorMessage != null) {
             model.addAttribute("errorMessage", errorMessage);
             return "addStudent";
@@ -47,20 +51,31 @@ public class StudentController {
     }
 
     @RequestMapping(value = "/saveEdit", method = RequestMethod.POST)
-    public String saveEditStudent(@ModelAttribute("student") Student student, RedirectAttributes model) {
-        String errorMessage = service.validateEditInformation(student);
+    public String saveEditStudent(@ModelAttribute("student") Student updatedStudent, RedirectAttributes model) {
+        String errorMessage = service.validateInput(updatedStudent,false);
         if (errorMessage != null) {
             model.addFlashAttribute("errorMessage", errorMessage);
-            long id = student.getId();
+            int id = updatedStudent.getId();
             return "redirect:/edit/" + id;
         } else {
-            service.save(student);
+            Student existingStudent = new Student();
+            existingStudent.setId(updatedStudent.getId());
+            existingStudent.setFirstName(updatedStudent.getFirstName());
+            existingStudent.setLastName(updatedStudent.getLastName());
+            existingStudent.setAge(updatedStudent.getAge());
+            existingStudent.setStudentCode(updatedStudent.getStudentCode());
+            existingStudent.setDepartment(updatedStudent.getDepartment());
+            existingStudent.setMajor(updatedStudent.getMajor());
+            existingStudent.setYear(updatedStudent.getYear());
+            existingStudent.setCountry(updatedStudent.getCountry());
+            existingStudent.setGpa(updatedStudent.getGpa());
+            service.save(existingStudent);
             return "redirect:/";
         }
     }
 
     @RequestMapping("/edit/{id}")
-    public ModelAndView showEditStudentPage(@PathVariable(name = "id") long id) {
+    public ModelAndView showEditStudentPage(@PathVariable(name = "id") int id) {
         ModelAndView mav = new ModelAndView("editStudent");
         Student student = service.get(id);
         mav.addObject("student", student);
@@ -69,9 +84,9 @@ public class StudentController {
     }
 
     @RequestMapping("/delete/{id}")
-    public String deleteStudent(@PathVariable(name = "id") long id) {
+    public String deleteStudent(@PathVariable(name = "id") int id) {
         service.delete(id);
         return "redirect:/";
     }
-
 }
+ */

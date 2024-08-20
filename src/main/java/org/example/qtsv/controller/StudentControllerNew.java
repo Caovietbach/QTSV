@@ -6,7 +6,10 @@ import org.example.qtsv.entity.LastYearStudentEntity;
 import org.example.qtsv.entity.Student;
 import org.example.qtsv.api.StudentData;
 import org.example.qtsv.service.Impl.StudentServiceImpl;
+import org.example.qtsv.service.Impl.StudentServiceIImpl2;
+import org.example.qtsv.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,16 +22,22 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/students")
 public class StudentControllerNew {
-    private final StudentServiceImpl service;
+    @Autowired
+    @Qualifier("StudentServiceOld")
+    private StudentService service;
     private static final int FILTER_BY_LAST_YEAR = 1;
     private static final int SORT_BY_LAST_YEAR_AND_COUNTRY = 2;
     private static final int SORT_BY_GPA_HIGH_TO_LOW = 3;
     private static final int SORT_BY_GPA_HIGH_TO_LOW_AND_LAST_NAME = 4;
 
+    /*
     @Autowired
     public StudentControllerNew(StudentServiceImpl service) {
         this.service = service;
     }
+    */
+
+
 
 
     @GetMapping("/")
@@ -65,6 +74,7 @@ public class StudentControllerNew {
         return new ApiResponse<>(true, "Thực hiện thành công", service.getContent(students));
     }
 
+    /*
     @GetMapping("/thesis/")
     public ApiResponse<LastYearStudentData> showStudents(@RequestParam(value = "page", defaultValue = "0") int page,
                                                          @RequestParam(value = "size", defaultValue = "10") int size,
@@ -78,15 +88,13 @@ public class StudentControllerNew {
         return new ApiResponse<>(true, "Thực hiện thành công", service.getThesis(students));
     }
 
+     */
+
 
     @PostMapping("/add")
     public String addStudent(@RequestBody Student student) {
-        try {
-            service.validateInput(student, true);
-            service.save(student);
-        } catch (Exception e){
-            return "An error occurred while validating input: " + e.getMessage();
-        }
+   //     service.validateInput(student, true);
+        service.save(student);
         return "Student saved successfully";
     }
 
@@ -98,15 +106,11 @@ public class StudentControllerNew {
 
     @PutMapping("/edit/{id}")
     public String editStudent(@PathVariable(name = "id") int id, @RequestBody Student updatedStudent) {
-        try {
-            service.validateInput(updatedStudent, false);
-            service.saveEdit(id, updatedStudent);
-        } catch (Exception e){
-            return "An error occurred while validating input: " + e.getMessage();
-        }
+     //   service.validateInput(updatedStudent, false);
+       // service.saveEdit(id, updatedStudent);
         return "Student saved successfully";
     }
-
+/*
     @DeleteMapping("/delete/{id}")
     public String deleteStudent(@PathVariable(name = "id") int id) {
         Student existingStudent = service.get(id);
@@ -117,6 +121,8 @@ public class StudentControllerNew {
             return "Student deleted successfully";
         }
     }
+
+ */
 }
 
 
