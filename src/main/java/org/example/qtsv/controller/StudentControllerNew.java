@@ -10,6 +10,7 @@ import org.example.qtsv.service.Impl.StudentServiceIImpl2;
 import org.example.qtsv.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +30,7 @@ public class StudentControllerNew {
     private static final int SORT_BY_LAST_YEAR_AND_COUNTRY = 2;
     private static final int SORT_BY_GPA_HIGH_TO_LOW = 3;
     private static final int SORT_BY_GPA_HIGH_TO_LOW_AND_LAST_NAME = 4;
+
 
     /*
     @Autowired
@@ -94,6 +96,7 @@ public class StudentControllerNew {
     @PostMapping("/add")
     public String addStudent(@RequestBody Student student) {
    //     service.validateInput(student, true);
+
         service.save(student);
         return "Student saved successfully";
     }

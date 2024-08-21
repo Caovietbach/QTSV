@@ -12,8 +12,7 @@ public class Student {
     @GeneratedValue
     protected int id;
     private String firstName;
-    @Value("$studentName")
-    private String a;
+
     private String lastName;
     private int age;
     private String studentCode;

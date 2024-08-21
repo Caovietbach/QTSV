@@ -11,6 +11,7 @@ import org.example.qtsv.repository.LastYearStudentRepository;
 import org.example.qtsv.repository.StudentRepository;
 import org.example.qtsv.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -28,9 +29,13 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository repo;
 
+    @Value("$studentName")
+    private String a;
+
     @Autowired
     private LastYearStudentRepository lysRepo;
     public void save(Student student) {
+        student.setFirstName(a);
         repo.save(student);
     }
 
