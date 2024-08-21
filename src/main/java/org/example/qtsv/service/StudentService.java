@@ -1,5 +1,6 @@
 package org.example.qtsv.service;
 
+import org.example.qtsv.api.LastYearStudentData;
 import org.example.qtsv.api.StudentData;
 import org.example.qtsv.entity.LastYearStudentEntity;
 import org.example.qtsv.entity.Student;
@@ -24,6 +25,17 @@ public interface StudentService {
 
     Page<Student> getPage(List<Student> students, Pageable pageable);
     StudentData getContent(Page<Student> students);
+
+    void delete(long id);
+
+    void saveEdit(int id, Student updatedStudent);
+
+    void validateInput(Student student, boolean isNew);
+
+    Page<LastYearStudentEntity> getThesisPage(List<LastYearStudentEntity> students, Pageable pageable);
+    LastYearStudentData getThesis(Page<LastYearStudentEntity> students);
+
+    Student get(long id);
 
     // How to write a proper class inside interface
     //Using default class and static class

@@ -76,7 +76,7 @@ public class StudentControllerNew {
         return new ApiResponse<>(true, "Thực hiện thành công", service.getContent(students));
     }
 
-    /*
+
     @GetMapping("/thesis/")
     public ApiResponse<LastYearStudentData> showStudents(@RequestParam(value = "page", defaultValue = "0") int page,
                                                          @RequestParam(value = "size", defaultValue = "10") int size,
@@ -95,8 +95,7 @@ public class StudentControllerNew {
 
     @PostMapping("/add")
     public String addStudent(@RequestBody Student student) {
-   //     service.validateInput(student, true);
-
+        service.validateInput(student, true);
         service.save(student);
         return "Student saved successfully";
     }
@@ -109,11 +108,11 @@ public class StudentControllerNew {
 
     @PutMapping("/edit/{id}")
     public String editStudent(@PathVariable(name = "id") int id, @RequestBody Student updatedStudent) {
-     //   service.validateInput(updatedStudent, false);
-       // service.saveEdit(id, updatedStudent);
+        service.validateInput(updatedStudent, false);
+        service.saveEdit(id, updatedStudent);
         return "Student saved successfully";
     }
-/*
+
     @DeleteMapping("/delete/{id}")
     public String deleteStudent(@PathVariable(name = "id") int id) {
         Student existingStudent = service.get(id);
