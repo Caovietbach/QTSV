@@ -2,20 +2,17 @@ package org.example.qtsv.service.Impl;
 
 import jakarta.transaction.Transactional;
 import org.example.qtsv.exception.ValidateException;
-import org.example.qtsv.api.LastYearStudentData;
+import org.example.qtsv.api.LastYearStudentDataResponse;
 import org.example.qtsv.entity.LastYearStudentEntity;
 import org.example.qtsv.entity.Student;
-import org.example.qtsv.api.StudentData;
-import org.example.qtsv.exception.ValidateException2;
+import org.example.qtsv.api.StudentDataResponse;
 import org.example.qtsv.repository.LastYearStudentRepository;
 import org.example.qtsv.repository.StudentRepository;
 import org.example.qtsv.service.StudentService;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,19 +20,27 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service("StudentServiceOld")
 @Transactional
 public class StudentServiceImpl implements StudentService {
     @Autowired
     private StudentRepository repo;
 
-    @Value("$studentName")
-    private String a;
-
     @Autowired
     private LastYearStudentRepository lysRepo;
+
+    private static final Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
+
+    /*
+    @Value("${studentName}")
+    private String user;
+     */
+
     public void save(Student student) {
-        student.setFirstName(a);
+        //student.setFirstName(a);
         repo.save(student);
     }
 
@@ -66,15 +71,17 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
+    @Override
     public Student get(long id) {
         return repo.findById(id).get();
     }
 
-
+    @Override
     public void delete(long id) {
         repo.deleteById(id);
     }
 
+    @Override
     public void saveEdit(int id, Student updatedStudent){
         Student existingStudent = get(id);
         existingStudent.setFirstName(updatedStudent.getFirstName());
@@ -88,7 +95,7 @@ public class StudentServiceImpl implements StudentService {
         save(existingStudent);
     }
 
-
+    @Override
     public void validateInput(Student student, boolean isNew) {
         if (student.getLastName() == null || student.getLastName().trim().isEmpty()) {
             throw new ValidateException("Student must have a last name");
@@ -166,18 +173,21 @@ public class StudentServiceImpl implements StudentService {
         }).collect(Collectors.toList());
     }
 
-    public List<Student> search( Student student){
+    @Override
+    public List<Student> search(Student student){
         List<Student> searchedStudents = repo.searchBy(student.getFirstName(),student.getLastName(),student.getAge(),
                 student.getStudentCode(),student.getYear(),student.getMajor(),
                 student.getCountry());
         return searchedStudents;
     }
 
+    @Override
     public List<LastYearStudentEntity> search(String thesisTitle){
         List<LastYearStudentEntity> searchedStudents = lysRepo.searchThesisBy(thesisTitle);
         return searchedStudents;
     }
 
+    @Override
     public Page<Student> getPage(List<Student> students, Pageable pageable) {
         int total = students.size();
         List<Student> paginatedList = students.stream()
@@ -187,6 +197,7 @@ public class StudentServiceImpl implements StudentService {
         return new PageImpl<>(paginatedList, pageable, total);
     }
 
+    @Override
     public Page<LastYearStudentEntity> getThesisPage(List<LastYearStudentEntity> students, Pageable pageable) {
         int total = students.size();
         List<LastYearStudentEntity> paginatedList = students.stream()
@@ -196,20 +207,24 @@ public class StudentServiceImpl implements StudentService {
         return new PageImpl<>(paginatedList, pageable, total);
     }
 
-    public StudentData getContent(Page<Student> students){
-        StudentData data = new StudentData(students.getTotalElements(),students.getTotalPages(), students.getSize(), students.getContent());
+    @Override
+    public StudentDataResponse getContent(Page<Student> students){
+        StudentDataResponse data = new StudentDataResponse(students.getTotalElements(),students.getTotalPages(), students.getSize(), students.getContent());
         return data;
     }
 
-    public LastYearStudentData getThesis(Page<LastYearStudentEntity> students){
-        LastYearStudentData data = new LastYearStudentData(students.getTotalElements(),students.getTotalPages(), students.getSize(), students.getContent());
+    @Override
+    public LastYearStudentDataResponse getThesis(Page<LastYearStudentEntity> students){
+        LastYearStudentDataResponse data = new LastYearStudentDataResponse(students.getTotalElements(),students.getTotalPages(), students.getSize(), students.getContent());
         return data;
     }
 
+    /*
+    @Override
+    public void showUser(String user){
+        logger.info("The user is: {}", user);
+    }
 
-
-    
-
-
+     */
 }
 

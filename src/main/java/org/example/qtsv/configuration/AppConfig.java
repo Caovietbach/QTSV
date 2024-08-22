@@ -1,15 +1,18 @@
 package org.example.qtsv.configuration;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import jakarta.servlet.Filter;
+import org.example.qtsv.filter.UserFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-@Component
+
+@Configuration
 public class AppConfig {
-
-    @Value("${server.port}")
-    private int port;
-
-    public void printServerPort() {
-        System.out.println("Server port is: " + port);
+    @Bean
+    public FilterRegistrationBean<Filter> AppFilter() {
+        FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new UserFilter());
+        return registrationBean;
     }
 }

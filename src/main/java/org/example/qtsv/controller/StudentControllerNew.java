@@ -1,16 +1,15 @@
 package org.example.qtsv.controller;
 
 import org.example.qtsv.api.ApiResponse;
-import org.example.qtsv.api.LastYearStudentData;
+import org.example.qtsv.api.LastYearStudentDataResponse;
 import org.example.qtsv.entity.LastYearStudentEntity;
 import org.example.qtsv.entity.Student;
-import org.example.qtsv.api.StudentData;
-import org.example.qtsv.service.Impl.StudentServiceImpl;
-import org.example.qtsv.service.Impl.StudentServiceIImpl2;
+import org.example.qtsv.api.StudentDataResponse;
 import org.example.qtsv.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,31 +25,22 @@ public class StudentControllerNew {
     @Autowired
     @Qualifier("StudentServiceOld")
     private StudentService service;
+
+
     private static final int FILTER_BY_LAST_YEAR = 1;
     private static final int SORT_BY_LAST_YEAR_AND_COUNTRY = 2;
     private static final int SORT_BY_GPA_HIGH_TO_LOW = 3;
     private static final int SORT_BY_GPA_HIGH_TO_LOW_AND_LAST_NAME = 4;
 
 
-    /*
-    @Autowired
-    public StudentControllerNew(StudentServiceImpl service) {
-        this.service = service;
-    }
-    */
-
-
-
-
     @GetMapping("/")
-    public ApiResponse<StudentData> showStudents(@RequestParam(value = "sort", required = false) Integer sort,
-                                                 @RequestParam(value = "page", defaultValue = "0") int page,
-                                                 @RequestParam(value = "size", defaultValue = "10") int size,
-                                                 @ModelAttribute Student s) {
+    public ApiResponse<StudentDataResponse> showStudents(@RequestParam(value = "sort", required = false) Integer sort,
+                                                         @RequestParam(value = "page", defaultValue = "0") int page,
+                                                         @RequestParam(value = "size", defaultValue = "10") int size,
+                                                         @ModelAttribute Student s) {
         Pageable pageable = PageRequest.of(page, size);
         List<Student> studentList = new ArrayList<Student>();
-        //Magic Number
-        // Request Life Cycle
+        //service.showUser(user);
 
         if (s.getFirstName() != null || s.getLastName() != null ||  s.getAge() != 0 ||
                 s.getStudentCode() != null || s.getYear() != 0 || s.getMajor() !=null || s.getCountry() != null) {
@@ -78,9 +68,9 @@ public class StudentControllerNew {
 
 
     @GetMapping("/thesis/")
-    public ApiResponse<LastYearStudentData> showStudents(@RequestParam(value = "page", defaultValue = "0") int page,
-                                                         @RequestParam(value = "size", defaultValue = "10") int size,
-                                                         @RequestParam(value = "thesisTitle") String thesisTitle) {
+    public ApiResponse<LastYearStudentDataResponse> showStudents(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                                 @RequestParam(value = "size", defaultValue = "10") int size,
+                                                                 @RequestParam(value = "thesisTitle") String thesisTitle) {
         Pageable pageable = PageRequest.of(page, size);
         List<LastYearStudentEntity> lastYearStudentList = new ArrayList<>();
         if (thesisTitle != null){
@@ -90,7 +80,7 @@ public class StudentControllerNew {
         return new ApiResponse<>(true, "Thực hiện thành công", service.getThesis(students));
     }
 
-     */
+
 
 
     @PostMapping("/add")
@@ -124,7 +114,7 @@ public class StudentControllerNew {
         }
     }
 
- */
+
 }
 
 

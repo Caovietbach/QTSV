@@ -1,7 +1,7 @@
 package org.example.qtsv.service;
 
-import org.example.qtsv.api.LastYearStudentData;
-import org.example.qtsv.api.StudentData;
+import org.example.qtsv.api.LastYearStudentDataResponse;
+import org.example.qtsv.api.StudentDataResponse;
 import org.example.qtsv.entity.LastYearStudentEntity;
 import org.example.qtsv.entity.Student;
 import org.springframework.data.domain.Page;
@@ -24,7 +24,7 @@ public interface StudentService {
     List<LastYearStudentEntity> search(String thesisTitle);
 
     Page<Student> getPage(List<Student> students, Pageable pageable);
-    StudentData getContent(Page<Student> students);
+    StudentDataResponse getContent(Page<Student> students);
 
     void delete(long id);
 
@@ -33,9 +33,12 @@ public interface StudentService {
     void validateInput(Student student, boolean isNew);
 
     Page<LastYearStudentEntity> getThesisPage(List<LastYearStudentEntity> students, Pageable pageable);
-    LastYearStudentData getThesis(Page<LastYearStudentEntity> students);
+    LastYearStudentDataResponse getThesis(Page<LastYearStudentEntity> students);
 
     Student get(long id);
+
+    //void showUser(String user);
+
 
     // How to write a proper class inside interface
     //Using default class and static class

@@ -1,7 +1,7 @@
 package org.example.qtsv.service.Impl;
 
-import org.example.qtsv.api.LastYearStudentData;
-import org.example.qtsv.api.StudentData;
+import org.example.qtsv.api.LastYearStudentDataResponse;
+import org.example.qtsv.api.StudentDataResponse;
 import org.example.qtsv.entity.LastYearStudentEntity;
 import org.example.qtsv.entity.Student;
 import org.example.qtsv.exception.ValidateException;
@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class StudentServiceIImpl2 implements StudentService {
     @Autowired
@@ -24,6 +27,8 @@ public class StudentServiceIImpl2 implements StudentService {
 
     @Autowired
     private LastYearStudentRepository lysRepo;
+
+    private static final Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
     public void save(Student student) {
         repo.save(student);
     }
@@ -185,19 +190,22 @@ public class StudentServiceIImpl2 implements StudentService {
         return new PageImpl<>(paginatedList, pageable, total);
     }
 
-    public StudentData getContent(Page<Student> students){
-        StudentData data = new StudentData(students.getTotalElements(),students.getTotalPages(), students.getSize(), students.getContent());
+    public StudentDataResponse getContent(Page<Student> students){
+        StudentDataResponse data = new StudentDataResponse(students.getTotalElements(),students.getTotalPages(), students.getSize(), students.getContent());
         return data;
     }
 
-    public LastYearStudentData getThesis(Page<LastYearStudentEntity> students){
-        LastYearStudentData data = new LastYearStudentData(students.getTotalElements(),students.getTotalPages(), students.getSize(), students.getContent());
+    public LastYearStudentDataResponse getThesis(Page<LastYearStudentEntity> students){
+        LastYearStudentDataResponse data = new LastYearStudentDataResponse(students.getTotalElements(),students.getTotalPages(), students.getSize(), students.getContent());
         return data;
     }
 
+    /*
+    @Override
+    public void showUser(String user){
+        logger.info("The user is: {}", user);
+    }
 
-
-
-
+     */
 
 }

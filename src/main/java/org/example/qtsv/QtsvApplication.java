@@ -12,18 +12,6 @@ public class QtsvApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(QtsvApplication.class, args);
-		//DatabaseConnector databaseConnector = context.getBean(DatabaseConnector.class);
-		//databaseConnector.connect();
 	}
-	@Bean
-	public CommandLineRunner run(AppConfig appConfig) {
-		return args -> {
-			appConfig.printServerPort();
-		};
-	}
-
-
-
-
 
 }
