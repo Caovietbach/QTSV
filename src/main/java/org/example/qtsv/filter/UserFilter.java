@@ -17,7 +17,6 @@ public class UserFilter implements Filter {
         String user = httpRequest.getHeader("Username");
         String api = httpRequest.getServletPath();
         logger.info("user: {} use {} api", user, api);
-        //System.out.println("test");
         chain.doFilter(request, response);
     }
 
