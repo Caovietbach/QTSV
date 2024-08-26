@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import java.io.IOException;
 
 public class UserFilter implements Filter {
@@ -18,6 +17,7 @@ public class UserFilter implements Filter {
         String user = httpRequest.getHeader("Username");
         String api = httpRequest.getServletPath();
         logger.info("user: {} use {} api", user, api);
+        //System.out.println("test");
         chain.doFilter(request, response);
     }
 
