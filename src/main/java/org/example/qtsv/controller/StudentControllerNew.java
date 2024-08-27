@@ -1,15 +1,16 @@
 package org.example.qtsv.controller;
 
-import org.example.qtsv.api.ApiResponse;
-import org.example.qtsv.api.LastYearStudentDataResponse;
+import org.example.qtsv.entity.UserEntity;
+import org.example.qtsv.response.api.ApiResponse;
+import org.example.qtsv.response.login.UserLoginResponse;
+import org.example.qtsv.response.pagination.LastYearStudentDataResponse;
 import org.example.qtsv.entity.LastYearStudentEntity;
 import org.example.qtsv.entity.Student;
-import org.example.qtsv.api.StudentDataResponse;
+import org.example.qtsv.response.pagination.StudentDataResponse;
 import org.example.qtsv.service.StudentService;
+import org.example.qtsv.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,11 +27,30 @@ public class StudentControllerNew {
     @Qualifier("StudentServiceOld")
     private StudentService service;
 
+    @Autowired
+    private UserService userService;
+
 
     private static final int FILTER_BY_LAST_YEAR = 1;
     private static final int SORT_BY_LAST_YEAR_AND_COUNTRY = 2;
     private static final int SORT_BY_GPA_HIGH_TO_LOW = 3;
     private static final int SORT_BY_GPA_HIGH_TO_LOW_AND_LAST_NAME = 4;
+
+
+    @GetMapping("/login")
+    public ApiResponse<UserLoginResponse> login(@RequestBody UserEntity user){
+        userService.validateLogin(user);
+        String token = userService.generateToken(user.getUserName());
+        UserLoginResponse res = userService.getLoginInfo(token);
+        return new ApiResponse<>(true, "Login successfully", res);
+    }
+
+    @PostMapping("/addUser")
+    public String addUser(@RequestBody UserEntity user) {
+        userService.save(user);
+        return "Student saved successfully";
+    }
+
 
 
     @GetMapping("/")
