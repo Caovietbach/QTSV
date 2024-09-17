@@ -41,6 +41,7 @@ public class StudentControllerNew {
     public ApiResponse<UserLoginResponse> login(@RequestBody UserEntity user){
         userService.validateLogin(user);
         String token = userService.generateToken(user.getUserName());
+        System.out.println(token);
         UserLoginResponse res = userService.getLoginInfo(token);
         return new ApiResponse<>(true, "Login successfully", res);
     }
@@ -58,6 +59,7 @@ public class StudentControllerNew {
                                                          @RequestParam(value = "page", defaultValue = "0") int page,
                                                          @RequestParam(value = "size", defaultValue = "10") int size,
                                                          @ModelAttribute Student s) {
+
         Pageable pageable = PageRequest.of(page, size);
         List<Student> studentList = new ArrayList<Student>();
         //service.showUser(user);

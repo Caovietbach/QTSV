@@ -8,9 +8,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class QtsvApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(QtsvApplication.class, args);
 	}
-
 }
