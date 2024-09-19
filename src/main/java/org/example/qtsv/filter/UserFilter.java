@@ -4,9 +4,12 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 
 import java.io.IOException;
 
+
+@Order(1)
 public class UserFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(UserFilter.class);
 
@@ -17,8 +20,9 @@ public class UserFilter implements Filter {
         String user = httpRequest.getHeader("Username");
         String api = httpRequest.getServletPath();
         logger.info("user: {} use {} api", user, api);
-        //System.out.println("test");
         chain.doFilter(request, response);
     }
 
 }
+
+

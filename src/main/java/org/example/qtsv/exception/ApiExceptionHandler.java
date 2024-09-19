@@ -1,6 +1,6 @@
 package org.example.qtsv.exception;
 
-import org.example.qtsv.api.ApiErrorResponse;
+import org.example.qtsv.response.error.ApiErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;

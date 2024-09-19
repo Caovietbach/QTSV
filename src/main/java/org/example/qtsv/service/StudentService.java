@@ -1,7 +1,7 @@
 package org.example.qtsv.service;
 
-import org.example.qtsv.api.LastYearStudentDataResponse;
-import org.example.qtsv.api.StudentDataResponse;
+import org.example.qtsv.response.pagination.LastYearStudentDataResponse;
+import org.example.qtsv.response.pagination.StudentDataResponse;
 import org.example.qtsv.entity.LastYearStudentEntity;
 import org.example.qtsv.entity.Student;
 import org.springframework.data.domain.Page;

@@ -1,19 +1,25 @@
 package org.example.qtsv.controller;
 
-import org.example.qtsv.api.ApiResponse;
-import org.example.qtsv.api.LastYearStudentDataResponse;
+import org.example.qtsv.entity.UserEntity;
+import org.example.qtsv.response.api.ApiResponse;
+import org.example.qtsv.response.login.UserLoginResponse;
+import org.example.qtsv.response.pagination.LastYearStudentDataResponse;
 import org.example.qtsv.entity.LastYearStudentEntity;
 import org.example.qtsv.entity.Student;
-import org.example.qtsv.api.StudentDataResponse;
+import org.example.qtsv.response.pagination.StudentDataResponse;
 import org.example.qtsv.service.StudentService;
+import org.example.qtsv.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +32,36 @@ public class StudentControllerNew {
     @Qualifier("StudentServiceOld")
     private StudentService service;
 
+    @Autowired
+    private UserService userService;
 
     private static final int FILTER_BY_LAST_YEAR = 1;
     private static final int SORT_BY_LAST_YEAR_AND_COUNTRY = 2;
     private static final int SORT_BY_GPA_HIGH_TO_LOW = 3;
     private static final int SORT_BY_GPA_HIGH_TO_LOW_AND_LAST_NAME = 4;
+
+    private static final Logger logger = LoggerFactory.getLogger(StudentControllerNew.class);
+
+
+    @PostMapping("/login")
+    public ApiResponse<UserLoginResponse> login(@RequestBody UserEntity user){
+        if (user != null) {
+            logger.info("Received user: {}", user.getUserName());
+        } else {
+            logger.error("User data not received in the request body.");
+        }
+        userService.validateLogin(user);
+        String token = userService.generateToken(user.getUserName());
+        UserLoginResponse res = userService.getLoginInfo(token);
+        return new ApiResponse<>(true, "Login successfully", res);
+    }
+
+    @PostMapping("/addUser")
+    public String addUser(@RequestBody UserEntity user) {
+        userService.save(user);
+        return "Student saved successfully";
+    }
+
 
 
     @GetMapping("/")
@@ -38,6 +69,7 @@ public class StudentControllerNew {
                                                          @RequestParam(value = "page", defaultValue = "0") int page,
                                                          @RequestParam(value = "size", defaultValue = "10") int size,
                                                          @ModelAttribute Student s) {
+
         Pageable pageable = PageRequest.of(page, size);
         List<Student> studentList = new ArrayList<Student>();
         //service.showUser(user);
