@@ -45,11 +45,6 @@ public class StudentControllerNew {
 
     @PostMapping("/login")
     public ApiResponse<UserLoginResponse> login(@RequestBody UserEntity user){
-        if (user != null) {
-            logger.info("Received user: {}", user.getUserName());
-        } else {
-            logger.error("User data not received in the request body.");
-        }
         userService.validateLogin(user);
         String token = userService.generateToken(user.getUserName());
         UserLoginResponse res = userService.getLoginInfo(token);

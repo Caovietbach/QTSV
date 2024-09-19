@@ -49,6 +49,7 @@ public class LoginFilter2 extends OncePerRequestFilter {
                         );
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+
         } catch (Exception e) {
             logger.error("error: {}", e);
         }
