@@ -19,6 +19,7 @@ import org.example.qtsv.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,12 +35,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository repo;
 
-    private final String SECRET_KEY = "secretfortheproject123456789anhemtalanguoimotnha";
+    private final String SECRET_KEY = "secretfortheproject123456789anhemtalanguoimotnha1234567890234567435554";
+
+    //private byte[] key = Decoders.BASE64.decode(SECRET_KEY);
+
 
     public Key getSecretKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
+
 
     public void save(UserEntity user) {
         repo.save(user);
@@ -67,6 +73,7 @@ public class UserServiceImpl implements UserService {
     public int extractExpiration(String token) {
         Date expiration = Jwts.parser()
                 .setSigningKey(getSecretKey())
+                //.setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody()
                 .getExpiration();
@@ -81,6 +88,7 @@ public class UserServiceImpl implements UserService {
     public UserEntity extractUser(String token) {
         String user = Jwts.parser()
                 .setSigningKey(getSecretKey())
+                //.setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();

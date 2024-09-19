@@ -9,12 +9,17 @@ import org.example.qtsv.entity.Student;
 import org.example.qtsv.response.pagination.StudentDataResponse;
 import org.example.qtsv.service.StudentService;
 import org.example.qtsv.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,18 +35,23 @@ public class StudentControllerNew {
     @Autowired
     private UserService userService;
 
-
     private static final int FILTER_BY_LAST_YEAR = 1;
     private static final int SORT_BY_LAST_YEAR_AND_COUNTRY = 2;
     private static final int SORT_BY_GPA_HIGH_TO_LOW = 3;
     private static final int SORT_BY_GPA_HIGH_TO_LOW_AND_LAST_NAME = 4;
 
+    private static final Logger logger = LoggerFactory.getLogger(StudentControllerNew.class);
 
-    @GetMapping("/login")
+
+    @PostMapping("/login")
     public ApiResponse<UserLoginResponse> login(@RequestBody UserEntity user){
+        if (user != null) {
+            logger.info("Received user: {}", user.getUserName());
+        } else {
+            logger.error("User data not received in the request body.");
+        }
         userService.validateLogin(user);
         String token = userService.generateToken(user.getUserName());
-        System.out.println(token);
         UserLoginResponse res = userService.getLoginInfo(token);
         return new ApiResponse<>(true, "Login successfully", res);
     }
