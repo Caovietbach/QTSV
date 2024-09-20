@@ -35,24 +35,7 @@ public class LoginFilter2 extends OncePerRequestFilter {
         String token = request.getHeader("Authorization");
         logger.info("token: {}", token);
 
-        try {
-            String jwtToken = token.substring(7);
-            logger.info("JWT: {}", jwtToken);
-            UserEntity user = userService.extractUser(jwtToken);
-            logger.info("user: {}", user.getUserName());
-            if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                user,
-                                null,
-                                Collections.emptyList()
-                        );
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
 
-        } catch (Exception e) {
-            logger.error("error: {}", e);
-        }
         chain.doFilter(request, response);
     }
 }

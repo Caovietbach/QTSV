@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers( "/api/students/login").permitAll()
                                 .anyRequest().authenticated()
-                ).addFilterBefore(loginFilter2, UsernamePasswordAuthenticationFilter.class);;
+                );
 
         return http.build();
     }
