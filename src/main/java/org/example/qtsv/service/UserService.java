@@ -8,9 +8,9 @@ import java.util.Date;
 public interface UserService {
     UserEntity getUserByName(String username);
 
-    void validateLogin(UserEntity user);
+    String validateLogin(UserEntity user);
 
-    void validateInput(UserEntity user);
+    String validateUser(UserEntity user);
 
     String generateToken(String username);
     int extractExpiration(String token);
@@ -21,6 +21,7 @@ public interface UserService {
     UserEntity extractUser(String token);
 
     void save(UserEntity user);
+
 
 
     void logout(UserEntity user);

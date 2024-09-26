@@ -29,7 +29,7 @@ public class LastYearStudentEntity extends Student {
     }
 
     public LastYearStudentEntity(int id, String firstName, String lastName, int age, String studentCode, String department, String major, int year, String country, Float gpa, String thesisCode, String thesisTitle) {
-        super(id, firstName, lastName, age , studentCode, department, major, 4, country, gpa);
+        super(id, firstName, lastName, 4 , studentCode, department, major, year, country, gpa);
         this.thesisCode = thesisCode;
         this.thesisTitle = thesisTitle;
     }

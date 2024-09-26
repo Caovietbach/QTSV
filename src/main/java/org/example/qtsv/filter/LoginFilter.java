@@ -1,33 +1,20 @@
-
+/*
 package org.example.qtsv.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.qtsv.entity.UserEntity;
-import org.example.qtsv.exception.ValidateException;
-import org.example.qtsv.service.JwtBlacklistService;
 import org.example.qtsv.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Component
 public class LoginFilter extends OncePerRequestFilter {
@@ -37,70 +24,37 @@ public class LoginFilter extends OncePerRequestFilter {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private JwtBlacklistService jwtBlacklistService;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        String jwtToken = request.getHeader("Authorization");
-        logger.info("token: {}", jwtToken);
-
-        if (jwtToken != null && jwtBlacklistService.isTokenBlacklisted(jwtToken)) {
-            setErrorResponse(response, request.getServletPath(), "Unauthorized", "Token is blacklisted");
-
-        }
-        if (jwtToken != null && jwtToken.startsWith("Bearer ")) {
-            String token = jwtToken.substring(7);
-            logger.info("JWT: {}", token);
+        String requestURI = request.getRequestURI();
+        String token = request.getHeader("Authorization");
+        logger.info("token: {}",token);
+        if (requestURI.equals("/api/students/login") || requestURI.equals("/api/students/addUser")) {
+            chain.doFilter(request, response);
+        } else if (token != null) {
             try {
-                UserEntity user = userService.extractUser(token);
-                logger.info("user: {}", user.getUserName());
-                logger.info("The user role is: {}", user.getRole());
-
-                if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    List<GrantedAuthority> authorities = new ArrayList<>();
-                    if ("user".equals(user.getRole())) {
-                        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-                    } else if ("admin".equals(user.getRole())) {
-                        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-                    } else {
-                        throw new ValidateException("This user does not have a role.");
-                    }
-                    logger.info("The user has {} authority", authorities);
-
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(
-                                    user,
-                                    null,
-                                    authorities
-                            );
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                String jwtToken = token.substring(7);
+                logger.info("JWT: {}",jwtToken);
+                UserEntity user = userService.extractUser(jwtToken);
+                if (user != null && user.getStatus() == 1) {
+                    logger.info("user: {}",user.getUserName());
+                    chain.doFilter(request, response);
+                } else {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Please log in.");
+                    logger.error("error: {}",1);
                 }
             } catch (Exception e) {
-                setErrorResponse(response, request.getServletPath(), "Unauthorized", e.getMessage());
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error processing token.");
+                logger.error("error: {}",e);
             }
+        } else {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authorization token missing or invalid.");
+            logger.error("error: {}",2);
         }
-
-
-        chain.doFilter(request, response);
-    }
-
-    private void setErrorResponse(HttpServletResponse response, String path, String error, String message) throws IOException {
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
-        Map<String, Object> body = new HashMap<>();
-        body.put("path", path);
-        body.put("error", error);
-        body.put("message", message);
-        body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(response.getOutputStream(), body);
     }
 }
 
-
+ */
 
 

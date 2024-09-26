@@ -5,12 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-
-import java.util.Collection;
 
 @Entity
 public class UserEntity {
@@ -23,9 +17,6 @@ public class UserEntity {
     private String password;
 
     private int status;
-
-    private String role;
-
 
     public long getId() {
         return id;
@@ -51,14 +42,6 @@ public class UserEntity {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public int getStatus() {
         return status;
     }
@@ -67,18 +50,14 @@ public class UserEntity {
         this.status = status;
     }
 
-
-
     public UserEntity(){
 
     }
 
-    public UserEntity(long id, String userName, String password,  String role, int status) {
+    public UserEntity(long id, String userName, String password, int status) {
         this.id = id;
         this.userName = userName;
         this.password = password;
-        this.role = role;
         this.status = status;
-
     }
 }
