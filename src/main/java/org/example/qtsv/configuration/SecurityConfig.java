@@ -44,19 +44,15 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
                         .accessDeniedHandler(customAccessDeniedHandler)
                 )
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers( "/api/students/login").permitAll()
                                 .anyRequest().authenticated()
-<<<<<<< Updated upstream
-                ).addFilterBefore(loginFilter2, UsernamePasswordAuthenticationFilter.class);;
-=======
                 )
                 .addFilterBefore(loginFilter,UsernamePasswordAuthenticationFilter.class)
                 ;
-
->>>>>>> Stashed changes
 
         return http.build();
     }

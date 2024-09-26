@@ -49,11 +49,7 @@ public class StudentControllerNew {
     private static final Logger logger = LoggerFactory.getLogger(StudentControllerNew.class);
 
     @PostMapping("/login")
-<<<<<<< Updated upstream
-    public ApiResponse<UserLoginResponse> login(@RequestBody UserEntity user){
-=======
     public ApiResponse<UserLoginResponse> login(@RequestBody UserEntity user) {
->>>>>>> Stashed changes
         userService.validateLogin(user);
         String token = userService.generateToken(user.getUserName());
         UserLoginResponse res = userService.getLoginInfo(token);
@@ -79,7 +75,7 @@ public class StudentControllerNew {
         return "User saved successfully";
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/")
     public ApiResponse<StudentDataResponse> showStudents(@RequestParam(value = "sort", required = false) Integer sort,
                                                          @RequestParam(value = "page", defaultValue = "0") int page,
