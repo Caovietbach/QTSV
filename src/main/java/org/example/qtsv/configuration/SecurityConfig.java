@@ -1,39 +1,62 @@
 
 package org.example.qtsv.configuration;
 
-import org.example.qtsv.filter.LoginFilter2;
+import org.example.qtsv.filter.LoginFilter;
+import org.example.qtsv.filter.UserFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final LoginFilter2 loginFilter2;
+    @Autowired
+    private final LoginFilter loginFilter;
 
-    public SecurityConfig(LoginFilter2 loginFilter2) {
-        this.loginFilter2 = loginFilter2;
+    @Autowired
+    private final UserFilter userFilter;
+
+    @Autowired
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+    @Autowired
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+
+    public SecurityConfig(LoginFilter loginFilter, UserFilter userFilter,
+                          CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
+                          CustomAccessDeniedHandler customAccessDeniedHandler) {
+        this.loginFilter = loginFilter;
+        this.userFilter = userFilter;
+        this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
+        this.customAccessDeniedHandler = customAccessDeniedHandler;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedHandler(customAccessDeniedHandler)
+                )
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers( "/api/students/login").permitAll()
                                 .anyRequest().authenticated()
+<<<<<<< Updated upstream
                 ).addFilterBefore(loginFilter2, UsernamePasswordAuthenticationFilter.class);;
+=======
+                )
+                .addFilterBefore(loginFilter,UsernamePasswordAuthenticationFilter.class)
+                ;
+
+>>>>>>> Stashed changes
 
         return http.build();
     }

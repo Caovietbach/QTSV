@@ -5,11 +5,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Collections;
 
 
-@Order(1)
+@Component
 public class UserFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(UserFilter.class);
 
@@ -17,9 +21,8 @@ public class UserFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String user = httpRequest.getHeader("Username");
         String api = httpRequest.getServletPath();
-        logger.info("user: {} use {} api", user, api);
+        logger.info("api {} is used", api);
         chain.doFilter(request, response);
     }
 

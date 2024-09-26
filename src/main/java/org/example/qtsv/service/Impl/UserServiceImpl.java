@@ -1,15 +1,10 @@
 package org.example.qtsv.service.Impl;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.transaction.Transactional;
-import netscape.javascript.JSObject;
-import org.example.qtsv.entity.LastYearStudentEntity;
-import org.example.qtsv.entity.Student;
 import org.example.qtsv.entity.UserEntity;
 import org.example.qtsv.exception.ValidateException;
 import org.example.qtsv.repository.UserRepository;
@@ -28,16 +23,14 @@ import java.security.Key;
 
 
 
-@Service("User")
+@Service()
 @Transactional
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository repo;
 
-    private final String SECRET_KEY = "secretfortheproject123456789anhemtalanguoimotnha1234567890234567435554";
-
-    //private byte[] key = Decoders.BASE64.decode(SECRET_KEY);
+    private final String SECRET_KEY = "secretfortheproject123456789566343535353453890234567435554";
 
 
     public Key getSecretKey() {
@@ -101,11 +94,15 @@ public class UserServiceImpl implements UserService {
         res.setAccessToken(token);
         res.setTokenType("Bearer");
         res.setExpiresIn(extractExpiration(token));
-        return res;
+        if (token == null) {
+            throw new ValidateException("Invalid token");
+        } else {
+            return res;
+        }
+
     }
 
-    @Override
-    public String validateLogin(UserEntity user) {
+    public void validateLogin(UserEntity user) {
         UserEntity userCheck = repo.findByuserName(user.getUserName());
 
         if (user.getUserName() == null) {
@@ -116,17 +113,33 @@ public class UserServiceImpl implements UserService {
             throw new ValidateException("No user have this user name");
         } else if (userCheck.getPassword() == user.getPassword() ){
             throw new ValidateException("Incorrect password");
-        } else {
-            return "Login successful";
         }
     }
 
-    public String validateUser(UserEntity user){
+    public void validateUser(UserEntity user){
         UserEntity userCheck = repo.findByuserName(user.getUserName());
         if (userCheck == null && userCheck.getStatus() != 1){
             throw new ValidateException("Please login to use service");
-        } else {
-            return "Pass";
+        }
+    }
+
+
+    public void validateInput(UserEntity user){
+        UserEntity userCheck = repo.findByuserName(user.getUserName());
+        if (user.getUserName() == null || user.getUserName().trim().isEmpty()) {
+            throw new ValidateException("An account must have a name");
+        }
+        if (userCheck != null) {
+            throw new ValidateException("This name has been used");
+        }
+        if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+            throw new ValidateException("An account must have a password");
+        }
+        if (user.getRole() == null || user.getRole().trim().isEmpty()) {
+            throw new ValidateException("User must have a role");
+        }
+        if (user.getRole().equals("user") && user.getRole().equals("admin")){
+            throw new ValidateException("There are only 2 role: Admin and User");
         }
     }
 
