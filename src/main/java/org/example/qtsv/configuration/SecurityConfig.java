@@ -47,9 +47,14 @@ public class SecurityConfig {
                         .authenticationEntryPoint(customAuthenticationEntryPoint)
                         .accessDeniedHandler(customAccessDeniedHandler)
                 )
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers( "/api/students/login").permitAll()
-                                .anyRequest().authenticated()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/login", "/api/auth/logout").permitAll()
+                        .requestMatchers("/api/users").hasRole("ADMIN")
+                        .requestMatchers("/api/students/").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/api/students/thesis").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/api/students/{id}/thesis").hasRole("USER")
+                        .requestMatchers("/api/students", "/api/students/{id}").hasAuthority("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(loginFilter,UsernamePasswordAuthenticationFilter.class)
                 ;

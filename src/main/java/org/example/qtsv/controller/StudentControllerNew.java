@@ -15,21 +15,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Role;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.AuthenticationManager;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/students")
+@RequestMapping("/api")
 public class StudentControllerNew {
     @Autowired
     @Qualifier("StudentServiceOld")
@@ -48,7 +44,7 @@ public class StudentControllerNew {
 
     private static final Logger logger = LoggerFactory.getLogger(StudentControllerNew.class);
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ApiResponse<UserLoginResponse> login(@RequestBody UserEntity user) {
         userService.validateLogin(user);
         String token = userService.generateToken(user.getUserName());
@@ -56,7 +52,7 @@ public class StudentControllerNew {
         return new ApiResponse<>(true, "Login successfully", res);
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/auth/logout")
     public ApiResponse<UserLoginResponse> logout(@RequestHeader("Authorization") String jwtToken) {
         logger.info("Token for logout: ", jwtToken);
         JwtBlacklist jwtBlacklist = jwtBlacklistService.findJwt(jwtToken);
@@ -66,17 +62,14 @@ public class StudentControllerNew {
         return new ApiResponse<>(true, "Logout successfully", null);
     }
 
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/addUser")
+    @PostMapping("/users")
     public String addUser(@RequestBody UserEntity user) {
         userService.validateInput(user);
         userService.save(user);
         return "User saved successfully";
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    @GetMapping("/")
+    @GetMapping("/students/")
     public ApiResponse<StudentDataResponse> showStudents(@RequestParam(value = "sort", required = false) Integer sort,
                                                          @RequestParam(value = "page", defaultValue = "0") int page,
                                                          @RequestParam(value = "size", defaultValue = "10") int size,
@@ -109,8 +102,7 @@ public class StudentControllerNew {
         return new ApiResponse<>(true, "Operation successful", service.getContent(students));
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @GetMapping("/thesis/")
+    @GetMapping("/students/thesis")
     public ApiResponse<LastYearStudentDataResponse> showStudents(@RequestParam(value = "page", defaultValue = "0") int page,
                                                                  @RequestParam(value = "size", defaultValue = "10") int size,
                                                                  @RequestParam(value = "thesisTitle") String thesisTitle) {
@@ -123,31 +115,27 @@ public class StudentControllerNew {
         return new ApiResponse<>(true, "Operation successful", service.getThesis(students));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/add")
+    @PostMapping("/students")
     public String addStudent(@RequestBody Student student) {
         service.validateInput(student, true);
         service.save(student);
         return "Student saved successfully";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/addLastYearStudentThesis/{id}")
+    @PostMapping("/students/{id}/thesis")
     public String addLastYearStudentThesis(@PathVariable(name = "id") int id, @RequestBody LastYearStudentEntity student) {
         service.save(id, student);
         return "Student thesis register successful.";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/edit/{id}")
+    @PutMapping("/students/{id}")
     public String editStudent(@PathVariable(name = "id") int id, @RequestBody Student updatedStudent) {
         service.validateInput(updatedStudent, false);
         service.saveEdit(id, updatedStudent);
         return "Student saved successfully";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/students/{id}")
     public String deleteStudent(@PathVariable(name = "id") int id) {
         Student existingStudent = service.get(id);
         if (existingStudent == null) {

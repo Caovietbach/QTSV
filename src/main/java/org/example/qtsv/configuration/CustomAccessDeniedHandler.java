@@ -27,15 +27,17 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         logger.error("Access error: {}", accessDeniedException.getMessage());
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
         final Map<String, Object> body = new HashMap<>();
-        body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
+        body.put("status", HttpServletResponse.SC_FORBIDDEN);
         body.put("error", accessDeniedException.getMessage());
         body.put("message", "Your account role is not allowed to use this function");
         body.put("path", request.getServletPath());
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), body);
+
+
     }
 }
