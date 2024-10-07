@@ -6,10 +6,10 @@ public class ApiResponse<T> {
     private  T data;
 
 
-    public ApiResponse(boolean success, String message, T page) {
+    public ApiResponse(boolean success, String message, T data) {
         this.success = success;
         this.message = message;
-        this.data = page;
+        this.data = data;
     }
 
     public boolean isSuccess() {
